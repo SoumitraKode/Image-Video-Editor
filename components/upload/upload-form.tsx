@@ -1,4 +1,4 @@
-"use client"
+"use client" ;
 
 import { Card, CardContent } from "../ui/card"
 import { cn } from "@/lib/utils"

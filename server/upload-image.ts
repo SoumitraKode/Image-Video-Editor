@@ -18,7 +18,7 @@ type UploadResult =
   | { success: UploadApiResponse; error?: never }
   | { error: string; success?: never }
 
-export const uploadImage = actionClient
+  export const uploadImage = actionClient
   .schema(formData)
   .action(async ({ parsedInput: { image } }): Promise<UploadResult> => {
     console.log(image)
@@ -36,15 +36,17 @@ export const uploadImage = actionClient
       return new Promise((resolve, reject) => {
         const uploadStream = cloudinary.uploader.upload_stream(
           { 
-            folder: "uploads", // Ensure you're not using AI analysis options
+            folder: "uploads",
             resource_type: "image",
           },
           (error, result) => {
             if (error) {
               console.error("Upload failed:", error);
               reject({ error: error.message });
-            } else {
+            } else if (result) { // ✅ Ensure result is defined before resolving
               resolve({ success: result });
+            } else {
+              reject({ error: "Upload failed with no result" }); // Handle undefined case explicitly
             }
           }
         );
@@ -56,3 +58,4 @@ export const uploadImage = actionClient
       return { error: "Error processing file" }
     }
   })
+

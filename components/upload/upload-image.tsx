@@ -1,4 +1,4 @@
-"use client"
+"use client" ;
 
 import { uploadImage } from "@/server/upload-image"
 import { useImageStore } from "@/lib/store"
@@ -9,8 +9,16 @@ import { cn } from "@/lib/utils"
 import { useLayerStore } from "@/lib/layer-store"
 import imageAnimation from "@/public/animations/image-upload.json"
 import { toast } from "sonner"
+import { useState,useEffect } from "react";
 
 export default function UploadImage() {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) return null; // Prevent SSR rendering issues
   const setTags = useImageStore((state) => state.setTags)
   const setGenerating = useImageStore((state) => state.setGenerating)
   const activeLayer = useLayerStore((state) => state.activeLayer)
